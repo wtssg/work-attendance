@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import wtssg.xdly.attend.entity.Attend;
-import wtssg.xdly.attend.service.AttendService;
+import wtssg.xdly.attend.services.AttendService;
 
 @Controller
 @RequestMapping("attend")
