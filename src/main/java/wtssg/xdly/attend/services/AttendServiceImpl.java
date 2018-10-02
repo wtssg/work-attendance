@@ -6,9 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wtssg.xdly.attend.dao.AttendMapper;
 import wtssg.xdly.attend.entity.Attend;
+import wtssg.xdly.common.utils.DateUtils;
 
+import java.util.Date;
+
+/**
+ * 打卡业务
+ *@author wt
+ *@date 2018/10/3 1:59
+ *@description
+ */
 @Service("AttendServiceImpl")
 public class AttendServiceImpl implements AttendService {
+    /**
+     * 12:00的小时数
+     */
+    private static final int NOON_HOUR = 12;
+    /**
+     * 12:00的分钟数
+     */
+    private static final int NOON_MINUTE = 0;
     private Log log = LogFactory.getLog(AttendServiceImpl.class);
 
     @Autowired
@@ -17,7 +34,30 @@ public class AttendServiceImpl implements AttendService {
     @Override
     public void signAttend(Attend attend) throws Exception {
         try {
-            attendMapper.insertSelective(attend);
+            Date today = new Date();
+            attend.setAttendDate(today);
+            attend.setAttendWeek((byte) DateUtils.getWeek(today));
+            Attend todayRecord =attendMapper.selectTodayRecord(attend.getUserId());
+            Date noon = DateUtils.getDate(NOON_HOUR, NOON_MINUTE);
+            if (todayRecord == null) {
+                if (today.compareTo(noon) <= 0) {
+                    // 打卡时间早于12点，早上打卡
+                    attend.setAttendMoring(today);
+                } else {
+                    // 打卡时间晚于12点，晚上打卡
+                    attend.setAttendEvening(today);
+                }
+                attendMapper.insertSelective(attend);
+            } else {
+                if (today.compareTo(noon) <= 0) {
+                    // 打卡时间早于12点，已经有打卡记录，不覆盖打卡记录
+
+                } else {
+                    // 打卡时间晚于12点，已经有打卡记录，覆盖打卡记录，晚上打卡
+                    todayRecord.setAttendEvening(today);
+                    attendMapper.updateByPrimaryKeySelective(todayRecord);
+                }
+            }
         } catch (Exception e) {
             log.error("用户签到异常", e);
             throw e;

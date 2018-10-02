@@ -13,7 +13,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         String uri = httpServletRequest.getRequestURI();
-        if (uri.contains("login")) {
+        if (uri.contains("login") || (uri.contains("sign"))) {
             return true;
         }
         HttpSession session = httpServletRequest.getSession();

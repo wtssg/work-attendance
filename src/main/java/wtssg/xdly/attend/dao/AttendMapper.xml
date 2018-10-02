@@ -14,6 +14,14 @@
   <sql id="Base_Column_List" >
     id, user_id, attend_date, attend_week, attend_moring, attend_evening, absence, attend_status
   </sql>
+
+  <select id="selectTodayRecord" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from attend
+    where user_id = #{userId}
+    AND attend_date = CURDATE()
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
