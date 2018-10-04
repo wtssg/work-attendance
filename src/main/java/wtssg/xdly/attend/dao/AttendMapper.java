@@ -1,6 +1,9 @@
 package wtssg.xdly.attend.dao;
 
 import wtssg.xdly.attend.entity.Attend;
+import wtssg.xdly.vo.PageQueryCondition;
+
+import java.util.List;
 
 public interface AttendMapper {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +19,8 @@ public interface AttendMapper {
     int updateByPrimaryKey(Attend record);
 
     Attend selectTodayRecord(Long userId);
+
+    int countByCondition(PageQueryCondition condition);
+
+    List<Attend> selectAttendPage(PageQueryCondition condition);
 }

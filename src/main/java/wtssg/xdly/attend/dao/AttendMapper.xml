@@ -11,6 +11,7 @@
     <result column="absence" property="absence" jdbcType="INTEGER" />
     <result column="attend_status" property="attendStatus" jdbcType="TINYINT" />
   </resultMap>
+  <resultMap id="int" type="int"/>
   <sql id="Base_Column_List" >
     id, user_id, attend_date, attend_week, attend_moring, attend_evening, absence, attend_status
   </sql>
@@ -21,6 +22,27 @@
     from attend
     where user_id = #{userId}
     AND attend_date = CURDATE()
+  </select>
+
+  <select id="countByCondition" resultMap="int">
+    select
+    count(0)
+    from attend
+    where user_id = #{userId}
+    <if test="startDate != null and endDate != null" >
+      AND attend_date BETWEEN #{startDate} AND #{endDate}
+    </if>
+  </select>
+
+  <select id="selectAttendPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from attend
+    where user_id = #{userId}
+    <if test="startDate != null and endDate != null" >
+      AND attend_date BETWEEN #{startDate} AND #{endDate}
+    </if>
+    LIMIT #{startRow}, #{pageSize}
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 

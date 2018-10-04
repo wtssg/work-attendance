@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wtssg.xdly.attend.dao.AttendMapper;
 import wtssg.xdly.attend.entity.Attend;
+import wtssg.xdly.common.page.PageQueryBean;
 import wtssg.xdly.common.utils.DateUtils;
+import wtssg.xdly.vo.PageQueryCondition;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 打卡业务
@@ -62,5 +65,20 @@ public class AttendServiceImpl implements AttendService {
             log.error("用户签到异常", e);
             throw e;
         }
+    }
+
+    @Override
+    public PageQueryBean listAttend(PageQueryCondition condition) {
+        // 根据条件查询，得到记录数
+        int count = attendMapper.countByCondition(condition);
+        PageQueryBean pageResult = new PageQueryBean();
+        if (count > 0) {
+            pageResult.setTotalRows(count);
+            pageResult.setCurrentPage(condition.getCurrentPage());
+            pageResult.setPageSize(condition.getPageSize());
+            List<Attend> attendList = attendMapper.selectAttendPage(condition);
+            pageResult.setItems(attendList);
+        }
+        return pageResult;
     }
 }

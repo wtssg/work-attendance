@@ -354,7 +354,7 @@
                         //ajax请求数据
                         $.ajax({
                             type: "GET",
-                            url: "/attend/attendList",
+                            url: "/attend/attendlist",
                             cache: false, //禁用缓存
                             data: param, //传入组装的参数
                             dataType: "json",
