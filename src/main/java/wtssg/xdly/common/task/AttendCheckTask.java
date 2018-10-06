@@ -2,12 +2,13 @@ package wtssg.xdly.common.task;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import wtssg.xdly.attend.dao.AttendMapper;
+import wtssg.xdly.attend.services.AttendService;
 
 public class AttendCheckTask {
 
     @Autowired
-    AttendMapper attendMapper;
+    AttendService attendService;
     public void checkAttend(){
-        System.out.println("task");
+        attendService.checkAttend();
     };
 }

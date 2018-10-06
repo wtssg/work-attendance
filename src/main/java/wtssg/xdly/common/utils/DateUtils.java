@@ -21,6 +21,16 @@ public class DateUtils {
     }
 
     /**
+     * 获得今天的星期
+     * @return
+     * 今天的星期数
+     */
+    public static int getTodayWeek() {
+        Date today = new Date();
+        return getWeek(today);
+    }
+
+    /**
      * 得到时间差（单位：分钟）
      * @param startDate
      * @param endDate

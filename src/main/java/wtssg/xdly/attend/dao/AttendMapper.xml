@@ -12,6 +12,7 @@
     <result column="attend_status" property="attendStatus" jdbcType="TINYINT" />
   </resultMap>
   <resultMap id="int" type="int"/>
+  <resultMap id="long" type="long"/>
   <sql id="Base_Column_List" >
     id, user_id, attend_date, attend_week, attend_moring, attend_evening, absence, attend_status
   </sql>
@@ -44,6 +45,29 @@
     </if>
     LIMIT #{startRow}, #{pageSize}
   </select>
+
+  <select id="selectTodayAbsence" resultMap="long">
+    SELECT id FROM `user`
+    WHERE id NOT IN(
+	    SELECT user_id FROM attend
+	    WHERE attend_date = CURDATE()
+    )
+  </select>
+
+  <insert id="batchInsert" parameterType="list">
+    INSERT INTO attend (user_id, attend_date,
+      attend_week, absence, attend_status)
+    VALUES
+      <foreach collection="list" item="attend" index="index" separator=",">
+        (#{attend.userId}, #{attend.attendDate}, #{attend.attendWeek}, #{attend.absence}, #{attend.attendStatus})
+      </foreach>
+  </insert>
+
+  <select id="selectTodayEveningAbsence" resultMap="BaseResultMap">
+    SELECT * FROM attend a
+    WHERE a.attend_evening IS NULL AND a.attend_date = CURDATE()
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
