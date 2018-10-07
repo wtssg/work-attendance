@@ -116,5 +116,6 @@
     <bean id="IdentityService" factory-bean="processEngine" factory-method="getIdentityService" />
     <!--<import resource="spring-job.xml"/>-->
     <import resource="spring-job.xml"/>
+    <import resource="spring-shiro.xml"/>
 
 </beans>

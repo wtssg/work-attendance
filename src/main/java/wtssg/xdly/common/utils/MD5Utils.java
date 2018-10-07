@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
  * @author wt
  * 用于密码的加密和比对
  */
-public class SecurityUtils {
+public class MD5Utils {
 
     /**
      * MD5加密设置的密码

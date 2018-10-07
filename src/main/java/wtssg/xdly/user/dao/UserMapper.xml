@@ -8,10 +8,34 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="head_image" property="headImage" jdbcType="VARCHAR" />
+    <collection property="roleList" resultMap="RoleResultMap"/>
   </resultMap>
+
+  <resultMap id="RoleResultMap" type="wtssg.xdly.user.entity.Role" >
+    <id column="roleid" property="roleid" jdbcType="BIGINT" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+    <result column="rd" property="description" jdbcType="VARCHAR" />
+    <collection property="permissionList" resultMap="PermissionResultMap"/>
+  </resultMap>
+
+  <resultMap id="PermissionResultMap" type="wtssg.xdly.user.entity.Permission" >
+    <id column="permissionid" property="permissionid" jdbcType="BIGINT" />
+    <result column="permission" property="permission" jdbcType="VARCHAR" />
+    <result column="pd" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     id, username, real_name, password, tel, head_image
   </sql>
+
+  <sql id="Role_Column_List" >
+    roleid, role, r.description rd
+  </sql>
+
+  <sql id="Permission_Column_List" >
+    permissionid, permission, p.description pd
+  </sql>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -20,9 +44,14 @@
   </select>
   <select id="selectByUsername" resultMap="BaseResultMap" >
     select
-    <include refid="Base_Column_List" />
-    from user
-    where username = #{username}
+    <include refid="Base_Column_List" />, <include refid="Role_Column_List" />,
+    <include refid="Permission_Column_List" />
+    FROM `user` u
+    LEFT JOIN user_role ur ON ur.user_id = u.id
+    LEFT JOIN role r ON ur.role_id = r.roleid
+    LEFT JOIN role_permission rp ON rp.role_id = r.roleid
+    LEFT JOIN permission p ON p.permissionid = rp.permission_id
+    WHERE u.username = #{username}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from user

@@ -1,5 +1,7 @@
 package wtssg.xdly.user.entity;
 
+import java.util.List;
+
 public class User {
     private Long id;
 
@@ -12,6 +14,8 @@ public class User {
     private String tel;
 
     private String headImage;
+
+    private List<Role> roleList;
 
     public Long getId() {
         return id;
@@ -59,5 +63,13 @@ public class User {
 
     public void setHeadImage(String headImage) {
         this.headImage = headImage == null ? null : headImage.trim();
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 }

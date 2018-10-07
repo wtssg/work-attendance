@@ -3,7 +3,7 @@ package wtssg.xdly.user.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import wtssg.xdly.common.utils.SecurityUtils;
+import wtssg.xdly.common.utils.MD5Utils;
 import wtssg.xdly.user.dao.UserMapper;
 import wtssg.xdly.user.entity.User;
 
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int createUser(User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        user.setPassword(SecurityUtils.encryptedPassword(user.getPassword()));
+        user.setPassword(MD5Utils.encryptedPassword(user.getPassword()));
         return userMapper.insert(user);
     }
 

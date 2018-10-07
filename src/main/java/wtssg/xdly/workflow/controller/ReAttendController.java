@@ -1,5 +1,8 @@
 package wtssg.xdly.workflow.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,17 +30,17 @@ public class ReAttendController {
     }
 
     @RequestMapping("/start")
-    public void startReAttendFlow(@RequestBody ReAttend reAttend, HttpSession session) {
-//        User user = (User) session.getAttribute("userInfo");
-        User user = new User();
-        user.setUsername("xdly");
+    public void startReAttendFlow(@RequestBody ReAttend reAttend) {
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("useInfo");
         reAttend.setReAttendStarter(user.getUsername());
         reAttendService.startReAttendFlow(reAttend);
     }
 
+//    @RequiresRoles("leader")
+    @RequiresPermissions("reAttend:list")
     @RequestMapping("/list")
-    public String listReAttendFlow(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("userInfo");
+    public String listReAttendFlow(Model model) {
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("useInfo");
         String userName = user.getUsername();
         List<ReAttend> tasks = reAttendService.listTasks(userName);
         model.addAttribute(tasks);

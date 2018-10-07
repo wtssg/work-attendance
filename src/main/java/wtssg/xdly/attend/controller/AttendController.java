@@ -1,5 +1,6 @@
 package wtssg.xdly.attend.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,7 @@ public class AttendController {
      * @param condition
      * @return
      */
+    @RequiresPermissions("attend:attendlist")
     @RequestMapping("/attendlist")
     @ResponseBody
     public PageQueryBean listAttend(PageQueryCondition condition, HttpSession session) {
